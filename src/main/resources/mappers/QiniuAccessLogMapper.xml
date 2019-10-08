@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.komawei.qiniuloganalyzer.dao.QiniuAccessLogDao">
+    <resultMap type="me.komawei.qiniuloganalyzer.entity.QiniuAccessLog" id="QiniuAccessLogResult">
+        <result column="id" property="id" />
+
+        <result column="domain" property="domain" />
+        <result column="log_file_name" property="logFileName" />
+        <result column="response_time" property="responseTime" />
+        <result column="visitor_ip" property="visitorIp" />
+        <result column="visit_time" property="visitTime" />
+        <result column="visit_path" property="visitPath" />
+        <result column="visit_type" property="visitType" />
+        <result column="http_status_code" property="httpStatusCode" />
+        <result column="file_size" property="fileSize" />
+        <result column="visit_source" property="visitSource" />
+        <result column="device_info" property="deviceInfo" />
+    </resultMap>
+
+    <insert id="saveBatch" parameterType="java.util.ArrayList">
+        INSERT INTO qiniu_access_log (domain, log_file_name, response_time, visitor_ip, visit_time, visit_path,
+            visit_type, http_status_code, file_size, visit_source, device_info)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.domain}, #{item.logFileName}, #{item.responseTime}, #{item.visitorIp}, #{item.visitTime}, #{item.visitPath},
+            #{item.visitType}, #{item.httpStatusCode}, #{item.fileSize}, #{item.visitSource}, #{item.deviceInfo})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByFileName">
+        DELETE FROM qiniu_access_log WHERE log_file_name = #{arg0}
+    </delete>
+</mapper>
